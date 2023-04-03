@@ -12,7 +12,6 @@ int hash(char key[]){
     int seed = 54216;
     index = (index + (key[i] << 5) * seed) % array_length;
   }
-
   return index;
 }
 
@@ -33,10 +32,15 @@ void createNode(char key[], char value[])
   node->next = NULL;
 
   int array_index = hash(key);
+  printf("Index of node with key:%s\nis %d\n",key ,array_index);
   
   if (hashmap[array_index] == 0){
     hashmap[array_index] = node;
   }else{
+    if (strcmp(hashmap[array_index]->key,key) == 0) {
+      printf("Error: The node should'nt have been this key. Already exists\n");
+      return;
+    }
     Node * current = hashmap[array_index]; 
     while(current->next != NULL){
     current = current->next;
@@ -51,7 +55,7 @@ Node * searchNode(char key[]){
     return hashmap[array_index];
   }else{
     if (hashmap[array_index]->next == NULL){
-      printf("O node com chave:\"%s\", não está na lista.\n",key);
+      printf("Error: The node with key:\"%s\", it's not on list.\n",key);
       return NULL;
     }
     Node * current = hashmap[array_index];
@@ -61,7 +65,7 @@ Node * searchNode(char key[]){
         return current;
       }
     }
-    printf("O node com chave:\"%s\", não está na lista.\n",key);
+    printf("Error: The node with key:\"%s\", it's not on list.\n",key);
     return NULL;
   }
 }
@@ -69,13 +73,15 @@ Node * searchNode(char key[]){
 
 int main(int argc, char const *argv[])
 {
-  createNode("BLA","testando");
-  createNode("BLB","testando BLB");
+  createNode("v1","value of node 1");
+  createNode("v2","value of node 2");
+  createNode("v3","value of node 3");
   
-  Node * BLA = searchNode("BLA");
-  Node * BLB = searchNode("BLB");
+  Node * first = searchNode("v1");
+  Node * second = searchNode("v2");
+  Node * third = searchNode("v3");
   
-
+  printf("%s\n%s\n%s\n",first->value,second->value,third->value);
   
   return 0;
 }
