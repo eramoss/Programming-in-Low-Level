@@ -2,8 +2,9 @@
 #include "stdlib.h"
 #include "stdio.h"
 #define array_length 100
-#define key_length 14
-#define value_length 52
+#define max_key_length 2 // array just contains 0..99 elements
+#define value_length 50
+#define seed_value 5653
 
 
 int hash(char key[]){ // function hash returns a nem integer as a fingerprint of key
@@ -17,8 +18,8 @@ int hash(char key[]){ // function hash returns a nem integer as a fingerprint of
   */
 
   int index =0;
-  for (int i=0; i<key_length; i++){
-    int seed = 54216;
+  for (int i=0; i<max_key_length; i++){
+    int seed = seed_value;
     index = ((index + (key[i] << 5)) * seed) % array_length ;
   }
   return index;
@@ -26,7 +27,7 @@ int hash(char key[]){ // function hash returns a nem integer as a fingerprint of
 
 
 typedef struct Node {
-  char key[key_length];
+  char key[max_key_length];
   char value[value_length];
   struct Node * next;
 }Node;
