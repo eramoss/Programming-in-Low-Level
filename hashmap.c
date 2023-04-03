@@ -7,10 +7,19 @@
 
 
 int hash(char key[]){ // function hash returns a nem integer as a fingerprint of key
+
+  /*
+    This hash functions is just for studies purposes
+    for more information see https://en.wikipedia.org/wiki/Hash_function
+
+    In this case the calculation in enough
+    but returns many conflicting numbers 
+  */
+
   int index =0;
   for (int i=0; i<key_length; i++){
     int seed = 54216;
-    index = (index + (key[i] << 5) * seed) % array_length;
+    index = ((index + (key[i] << 5)) * seed) % array_length ;
   }
   return index;
 }
@@ -32,7 +41,7 @@ void createNode(char key[], char value[])
   node->next = NULL;
 
   int array_index = hash(key);
-  printf("Index of node with key:%s\nis %d\n",key ,array_index);
+  printf("Index of node with key:%s is: %d\n",key ,array_index);
   
   if (hashmap[array_index] == 0){
     hashmap[array_index] = node;
