@@ -6,7 +6,7 @@
 #define value_length 52
 
 
-int hash(char key[]){
+int hash(char key[]){ // function hash returns a nem integer as a fingerprint of key
   int index =0;
   for (int i=0; i<key_length; i++){
     int seed = 54216;
@@ -22,13 +22,13 @@ typedef struct Node {
   struct Node * next;
 }Node;
 
-Node * hashmap[array_length] = {0};
+Node * hashmap[array_length] = {0}; // array to contain nodes
 
 void createNode(char key[], char value[])
 {
   Node * node = malloc(sizeof(Node));
   strcpy(node->key, key);
-  strcpy(node->value, value);
+  strcpy(node->value, value); /* initialize node */
   node->next = NULL;
 
   int array_index = hash(key);
@@ -37,35 +37,35 @@ void createNode(char key[], char value[])
   if (hashmap[array_index] == 0){
     hashmap[array_index] = node;
   }else{
-    if (strcmp(hashmap[array_index]->key,key) == 0) {
+    if (strcmp(hashmap[array_index]->key,key) == 0) { /* verify if this node has key that already exists */
       printf("Error: The node should'nt have been this key. Already exists\n");
       return;
     }
     Node * current = hashmap[array_index]; 
-    while(current->next != NULL){
+    while(current->next != NULL){ /* walks to linked list until pointer next is null */
     current = current->next;
     }
-    current->next = node;
+    current->next = node; /* put the node in last item of linked list */
   }
 }
 
 Node * searchNode(char key[]){
   int array_index = hash(key);
-  if(strcmp(key,hashmap[array_index]->key) == 0){
+  if(strcmp(key,hashmap[array_index]->key) == 0){ // compare key of first item
     return hashmap[array_index];
   }else{
-    if (hashmap[array_index]->next == NULL){
+    if (hashmap[array_index]->next == NULL){ // verify if the node has a next item
       printf("Error: The node with key:\"%s\", it's not on list.\n",key);
       return NULL;
     }
     Node * current = hashmap[array_index];
-    while (current->next != NULL){
+    while (current->next != NULL){ /* walks to linked list until pointer next is null */
       current = current->next;
       if(strcmp(current->key,key) == 0){
-        return current;
+        return current; // return the node with key correctly
       }
     }
-    printf("Error: The node with key:\"%s\", it's not on list.\n",key);
+    printf("Error: The node with key:\"%s\", it's not on list.\n",key); // Error if key is not on list
     return NULL;
   }
 }
