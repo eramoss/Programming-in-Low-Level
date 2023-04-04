@@ -9,8 +9,8 @@ src="https://cdn-icons-png.flaticon.com/512/868/868786.png" min-width="10" max-w
 
 ```C
 typedef struct {
-  char key[max_key_length];
-  char value[value_length];
-  struct Node * next;
-} Node;
+  int min_coffe_day;
+  char name[name_length];
+  struct Programmer * next;
+} Programmer;
 ```
