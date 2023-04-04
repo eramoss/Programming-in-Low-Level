@@ -26,7 +26,7 @@ int hash(char key[]){ // function hash returns a nem integer as a fingerprint of
 }
 
 
-typedef struct {
+typedef struct Node{
   char key[max_key_length];
   char value[value_length];
   struct Node * next;
