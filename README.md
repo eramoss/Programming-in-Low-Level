@@ -2,10 +2,12 @@
 
 Repository for studie all of programming in low level\
 Here i go to make a data structures and some tests for my curiosity
-<img
-src="https://cdn-icons-png.flaticon.com/512/868/868786.png" min-width="10" max-width="200" width="205" align="right" alt="logo code">
 
 ---
+
+<div
+style="display: flex; flex-direction: row; align-items: center; justify-content: center;"
+>
 
 ```C
 typedef struct {
@@ -14,3 +16,5 @@ typedef struct {
   struct Programmer * next;
 } Programmer;
 ```
+
+</div>
