@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#define array_size 100
+#define max_lenght_number 2048
 typedef struct Node{
   int data;
   struct Node *left;
@@ -80,15 +81,34 @@ Node * Search(Node* root, int data){
 }
 
 
+void printInOrder(Node* root){
+  if (root) {
+    printInOrder(root->left); // stack up until root is null
+    printf("%d ", root->data); // stack down
+    printInOrder(root->right); // stack up until root is null
+  }
+}
+
+
 
 int main(int argc, char const *argv[]){
 
   Node *  root = NULL;
-  root = createNode(root, 50);
-  Node * node = createNode(root, 100);
-  Node * child = createNode(root, 32);
+  int array[array_size];
+  for(int i = 0; i < array_size; i++){
+    array[i] = rand() % max_lenght_number; // random number generator populate array
+  }
 
-  Node * test = Search(root, 33);
+  for (int i=0; i < array_size; i++){
+    if (i == 0) {
+      root = createNode(root, array[i]);   // the array populate tree structure
+    } else {
+      Node * node = createNode(root,array[i]);
+    }
+  }
+
+  printInOrder(root);
+  printf("\n");
 
   return 0;
 }
