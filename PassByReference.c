@@ -26,7 +26,7 @@ int main(int argc, char const *argv[])
   pointer_hello = &hello;
   f1(pointer_hello);
   /*
-    The output of functions above will be like this:
+    The output of functions above will be look like this:
 
      Console:
       from f1: 0x7ffdac9f39cc

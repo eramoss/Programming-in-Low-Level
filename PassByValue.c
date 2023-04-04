@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
   char hello[] = "hello world";
   f1(hello);
   /*
-    The output of functions above will be like this:
+    The output of functions above will be look like this:
 
      Console:
       from f1: 0x7fffda5661a8
