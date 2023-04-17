@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <sstream>
 
 double number_value;
 std::string string_value;
 std::map<std::string, double> table;
+std::istream* input;
 
 double prim(bool get); // pre assignment functions
 double term(bool get);
@@ -31,7 +33,7 @@ Token_value curr_token = IMPR;
 Token_value get_token(){
   char ch;
   do {
-    if (!std::cin.get(ch)) return curr_token = END;
+    if (!input->get(ch)) return curr_token = END;
   } while (ch != '\n' && isspace(ch));
   switch (ch)
   { 
@@ -43,15 +45,15 @@ Token_value get_token(){
       return curr_token = Token_value(ch);
 
     case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '.':
-      std::cin.putback(ch);  // case ch is a number, put the ch value on number value and return current token as a NUMBER.
-      std::cin >> number_value;
+      input->putback(ch);  // case ch is a number, put the ch value on number value and return current token as a NUMBER.
+      *input >> number_value;
       return curr_token = NUMBER;
 
     default: {
       if (isalpha(ch)) {
         string_value = ch;
-        while( std::cin.get(ch) && isalnum(ch)) string_value.push_back(ch); 
-        std::cin.putback(ch);
+        while( input->get(ch) && isalnum(ch)) string_value.push_back(ch); 
+        input->putback(ch);
         if(string_value == "clear") system("clear");
         return curr_token = NAME;
       }
@@ -144,15 +146,28 @@ double expr(bool get){
 
 
 
-int main(int argc, char const *argv[])
-{
-  table["pi"] = 3.1315926535897932385;
+int main(int argc, char *argv[])
+{ 
+  switch(argc){
+    case 1:
+      input = &std::cin;
+      break;
+    case 2:
+      input = new std::istringstream(argv[1]);
+      break;
+    default:
+      error("excessive args");
+      return 1;
+  }
+
+  table["pi"] = 3.1415926535897932385;
   table["e"] = 2.7182818284590452354;
-  while(std::cin) {
+  while(*input) {
     get_token();
     if(curr_token == END) break;
     if(curr_token == IMPR) continue;
     std::cout << expr(false) << "\n";
   }
+  if(input != &std::cin) delete input;
   return errors_amount;
 }
