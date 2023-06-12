@@ -1,4 +1,5 @@
 #include "cstring"
+#include "iostream"
 
 typedef struct Srep {
   char* s; // pointer to elements
@@ -74,6 +75,25 @@ class string {
   string& operator=(const string&);
   string& operator=(const char*);
   ~string();
+  string& operator+= (const string&);
+  string& operator+= (const char*);
+
+  friend std::ostream& operator << (std::ostream&, const string&);
+  friend std::istream& operator >> (std::istream&, string&);
+
+  friend bool operator == (const string& x, const char* y) {
+    return strcmp(x.rep->s, y) == 0;
+  }
+  friend bool operator == (const string& x, const string& y) {
+    return strcmp(x.rep->s, y.rep->s) == 0;
+  }
+
+  friend bool operator != (const string& x, const string& y) {
+    return !strcmp(x.rep->s, y.rep->s) == 0;
+  }
+  friend bool operator != (const string& x, const char* y) {
+    return !strcmp(x.rep->s, y) == 0;
+  }
 
 
 
@@ -132,3 +152,5 @@ string& string::operator=(const char* x) {
   return *this;
 }
 
+string operator+(const string& x, const string& y);
+string operator+(const string& x, const char* y);
