@@ -35,6 +35,17 @@ string& string::operator=(const string& x) {
   rep = x.rep;
   return *this;
 }
+string::string(const char* x) {
+  rep = new Srep(strlen(x), x);
+}
+string& string::operator=(const char* x) {
+  if (rep->n == 1) rep->assign(strlen(x), x);
+  else {
+    rep->n--;
+    rep = new Srep(strlen(x), x);
+  }
+  return *this;
+}
 
 
 struct string::Srep {
