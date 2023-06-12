@@ -29,8 +29,8 @@ typedef struct Srep {
       s = new char[size + 1];
     }
     strcpy(s, p);
-
   }
+
   private: // private copys
   Srep(const Srep&);
   Srep& operator=(const Srep&);
@@ -38,6 +38,13 @@ typedef struct Srep {
 
 
 class Cref {
+
+  /*
+  * defined to get a reference to s[i]
+  * string::operator[] returns a Cref when its not const
+  * Cref is similar to char& except on Srep::copy()
+  * /// copy on write
+  */
   public:
   friend class string;
   string& s;
@@ -77,7 +84,7 @@ class string {
     return rep->s[i];
   }
   void write(int i, char c) {
-    rep = rep->copy();
+    rep = rep->copy(); // just copy on write
     rep->s[i] = c;
   }
 
@@ -107,6 +114,7 @@ string::~string() {
 }
 
 string& string::operator=(const string& x) {
+  /// share representation
   x.rep->n++;
   if (--rep->n == 0) delete rep;
   rep = x.rep;
