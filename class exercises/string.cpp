@@ -78,7 +78,7 @@ class string {
   string& operator+= (const string& y) {
 
     string temp = *this;
-    temp.write(0, this->read(0)); // copy a literal string to discard ol representation
+    temp.write(0, this->read(0)); // copy a literal string to discard old representation
     delete[] this->rep->s;
     this->rep->size = this->size() + y.size();
     this->rep->s = new char[this->size() - 1];
@@ -94,7 +94,7 @@ class string {
       ySize++;
     }
     string temp = *this;
-    temp.write(0, this->read(0)); // copy a literal string to discard ol representation
+    temp.write(0, this->read(0)); // copy a literal string to discard old representation
     delete[] this->rep->s;
     this->rep->size = this->size() + ySize;
 
