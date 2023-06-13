@@ -1,82 +1,110 @@
 #include "cstring"
 #include "iostream"
 
-typedef struct Srep {
-  char* s; // pointer to elements
-  int size; // amount of characters
-  int n; // counter of references
-
-  Srep(int new_size, const char* p) {
-    n = 1;
-    size = new_size;
-    s = new char[size + 1]; /// the expression [size + 1] add one to the end for null(\0) at end of string
-    strcpy(s, p);
-  }
-
-  ~Srep() {
-    delete[] s;
-  }
-
-  Srep* copy() {
-    if (n == 1) return this;
-    n--;
-    return new Srep(size, s);
-  }
-
-  void assign(int new_size, const char* p) {
-    if (size != new_size) {
-      delete[] s;
-      size = new_size;
-      s = new char[size + 1];
-    }
-    strcpy(s, p);
-  }
-
-  private: // private copys
-  Srep(const Srep&);
-  Srep& operator=(const Srep&);
-} Srep;
-
-
-class Cref {
-
-  /*
-  * defined to get a reference to s[i]
-  * string::operator[] returns a Cref when its not const
-  * Cref is similar to char& except on Srep::copy()
-  * /// copy on write
-  */
-  public:
-  friend class string;
-  string& s;
-  int i;
-  Cref(string& ss, int ii) : s(ss), i(ii) {
-  }
-  operator char() const {
-    return s.read(i);
-  }
-  void operator = (char c) {
-    s.write(i, c);
-  }
-};
-
-
 
 
 class string {
-  public: // representation
+  // representation
+  public:
+  struct Srep {
+    char* s; // pointer to elements
+    int size; // amount of characters
+    int n; // counter of references
+
+    Srep(int new_size, const char* p) {
+      n = 1;
+      size = new_size;
+      s = new char[size + 1]; /// the expression [size + 1] add one to the end for null(\0) at end of string
+      strcpy(s, p);
+    }
+
+    ~Srep() {
+      delete[] s;
+    }
+
+    Srep* copy() {
+      if (n == 1) return this;
+      n--;
+      return new Srep(size, s);
+    }
+
+    void assign(int new_size, const char* p) {
+      if (size != new_size) {
+        delete[] s;
+        size = new_size;
+        s = new char[size + 1];
+      }
+      strcpy(s, p);
+    }
+
+    private: // private copys
+    Srep(const Srep&);
+    Srep& operator=(const Srep&);
+  };
   Srep* rep;
+
+  class Cref {
+
+    /*
+    * defined to get a reference to s[i]
+    * string::operator[] returns a Cref when its not const
+    * Cref is similar to char& except on Srep::copy()
+    * /// copy on write
+    */
+    public:
+    friend class string;
+    string& s;
+    int i;
+    Cref(string& ss, int ii) : s(ss), i(ii) {
+    }
+    operator char() const {
+      return s.read(i);
+    }
+    void operator = (char c) {
+      s.write(i, c);
+    }
+  };
+
   class Range {
   }; // for exception
 
   string();
-  string(const char*);
-  string(const string&);
-  string& operator=(const string&);
-  string& operator=(const char*);
+  string(const char* x);
+  string(const string& x);
+  string& operator=(const string& x);
+  string& operator=(const char* x);
   ~string();
-  string& operator+= (const string&);
-  string& operator+= (const char*);
+
+  string& operator+= (const string& y) {
+
+    string temp = *this;
+    temp.write(0, this->read(0)); // copy a literal string to discard ol representation
+    delete[] this->rep->s;
+    this->rep->size = this->size() + y.size();
+    this->rep->s = new char[this->size() - 1];
+    strcpy(this->rep->s, temp.rep->s);
+    strncat(this->rep->s, y.rep->s, y.size());
+
+
+    return *this;
+  }
+  string& operator+= (const char* y) {
+    int ySize = 0;
+    for (int i = 0; y[i] != '\0'; ++i) {
+      ySize++;
+    }
+    string temp = *this;
+    temp.write(0, this->read(0)); // copy a literal string to discard ol representation
+    delete[] this->rep->s;
+    this->rep->size = this->size() + ySize;
+
+    this->rep->s = new char[this->size()];
+    strcpy(this->rep->s, temp.rep->s);
+    strncat(this->rep->s, y, ySize);
+
+
+    return *this;
+  }
 
   friend std::ostream& operator << (std::ostream&, const string&);
   friend std::istream& operator >> (std::istream&, string&);
@@ -152,5 +180,44 @@ string& string::operator=(const char* x) {
   return *this;
 }
 
-string operator+(const string& x, const string& y);
-string operator+(const string& x, const char* y);
+string operator+(const string& x, const string& y) {
+  string result = string();
+  delete[] result.rep->s;
+  result.rep->size = x.size() + y.size();
+  result.rep->s = new char[result.size() - 1];
+  strcpy(result.rep->s, x.rep->s);
+  strncat(result.rep->s, y.rep->s, y.size());
+
+
+  return result;
+}
+string operator+(const string& x, const char* y) {
+  int ySize = 0;
+  for (int i = 0; y[i] != '\0'; ++i) {
+    ySize++;
+  }
+
+  string result = string();
+  delete[] result.rep->s;
+  result.rep->size = x.size() + ySize;
+
+  result.rep->s = new char[result.size()];
+  strcpy(result.rep->s, x.rep->s);
+  strncat(result.rep->s, y, ySize);
+
+
+  return result;
+}
+
+
+
+int main(int argc, char const* argv[]) {
+  string x;
+  x = "hello ";
+
+
+  string concat = x + "world";
+  concat += " , im concatenating";
+  std::cout << concat.rep->s << std::endl;
+  return 0;
+}
