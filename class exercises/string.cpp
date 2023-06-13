@@ -8,10 +8,10 @@ class string {
   public:
   struct Srep {
     char* s; // pointer to elements
-    int size; // amount of characters
-    int n; // counter of references
+    uint32_t size; // amount of characters
+    uint32_t n; // counter of references
 
-    Srep(int new_size, const char* p) {
+    Srep(uint32_t new_size, const char* p) {
       n = 1;
       size = new_size;
       s = new char[size + 1]; /// the expression [size + 1] add one to the end for null(\0) at end of string
@@ -28,7 +28,7 @@ class string {
       return new Srep(size, s);
     }
 
-    void assign(int new_size, const char* p) {
+    void assign(uint32_t new_size, const char* p) {
       if (size != new_size) {
         delete[] s;
         size = new_size;
@@ -54,8 +54,8 @@ class string {
     public:
     friend class string;
     string& s;
-    int i;
-    Cref(string& ss, int ii) : s(ss), i(ii) {
+    uint32_t i;
+    Cref(string& ss, uint32_t ii) : s(ss), i(ii) {
     }
     operator char() const {
       return s.read(i);
@@ -89,8 +89,8 @@ class string {
     return *this;
   }
   string& operator+= (const char* y) {
-    int ySize = 0;
-    for (int i = 0; y[i] != '\0'; ++i) {
+    uint32_t ySize = 0;
+    for (uint32_t i = 0; y[i] != '\0'; ++i) {
       ySize++;
     }
     string temp = *this;
@@ -106,8 +106,17 @@ class string {
     return *this;
   }
 
-  friend std::ostream& operator << (std::ostream&, const string&);
-  friend std::istream& operator >> (std::istream&, string&);
+  friend std::ostream& operator << (std::ostream& standard_output, const string& x) {
+    standard_output << x.rep->s;
+    return standard_output;
+  }
+  friend std::istream& operator >> (std::istream& standard_input, string& x) {
+    char* buffer;
+    uint16_t bufferSize = 1024;
+    standard_input.getline(buffer, bufferSize);
+    x = buffer;
+    return standard_input;
+  }
 
   friend bool operator == (const string& x, const char* y) {
     return strcmp(x.rep->s, y) == 0;
@@ -125,25 +134,25 @@ class string {
 
 
 
-  void check(int i) const {
+  void check(uint32_t i) const {
     if (i < 0 || rep->size <= i) throw Range();
   }
-  char read(int i) const {
+  char read(uint32_t i) const {
     return rep->s[i];
   }
-  void write(int i, char c) {
+  void write(uint32_t i, char c) {
     rep = rep->copy(); // just copy on write
     rep->s[i] = c;
   }
 
-  Cref operator[] (int i) {
+  Cref operator[] (uint32_t i) {
     check(i); return Cref(*this, i);
   }
-  char operator[] (int i) const {
+  char operator[] (uint32_t i) const {
     check(i); return rep->s[i];
   }
 
-  int size() const {
+  uint32_t size() const {
     return rep->size;
   }
 };
@@ -192,8 +201,8 @@ string operator+(const string& x, const string& y) {
   return result;
 }
 string operator+(const string& x, const char* y) {
-  int ySize = 0;
-  for (int i = 0; y[i] != '\0'; ++i) {
+  uint32_t ySize = 0;
+  for (uint32_t i = 0; y[i] != '\0'; ++i) {
     ySize++;
   }
 
@@ -213,11 +222,11 @@ string operator+(const string& x, const char* y) {
 
 int main(int argc, char const* argv[]) {
   string x;
-  x = "hello ";
+  std::cin >> x;
 
 
   string concat = x + "world";
   concat += " , im concatenating";
-  std::cout << concat.rep->s << std::endl;
+  std::cout << concat << std::endl;
   return 0;
 }
