@@ -222,11 +222,14 @@ string operator+(const string& x, const char* y) {
 
 int main(int argc, char const* argv[]) {
   string x;
+  string y = "world";
   std::cin >> x;
 
 
   string concat = x + "world";
   concat += " , im concatenating";
-  std::cout << concat << std::endl;
+  if (y == x) {
+    std::cout << concat << std::endl;
+  }
   return 0;
 }
