@@ -6,7 +6,7 @@ mtx_t lock;
 int j;
 
 int function_1(void* arg) {
-  mtx_lock(&lock);
+  mtx_lock(&lock); // lock to prevent concurrent thread access same memory of function
   int i = 0;
 
   j++;
@@ -20,7 +20,13 @@ int function_1(void* arg) {
 
   printf("...Done\n");
 
-  mtx_unlock(&lock);
+  //mtx_unlock(&lock);
+  /*
+    mtx_unlock(&lock);
+    unlock the function to other thread access and make process
+    if doesn't unlock the function, the 2 thread will be blocked
+    and the process will be blocked in this function
+  */
   return 0;
 }
 
