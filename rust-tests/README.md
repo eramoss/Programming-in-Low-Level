@@ -33,5 +33,6 @@ If you're interested in learning Rust seriously and developing production-grade 
 ## Contact
 
 If you have any questions or suggestions related to these test files, please feel free to contact me.
+[Email me in edulramos@outlook.com](mailto:edulramos@outlook.com).
 
 Happy coding!
