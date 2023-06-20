@@ -1,4 +1,5 @@
-/guessing-game/target
+target
+Cargo.lock
 # Prerequisites
 *.d
 
