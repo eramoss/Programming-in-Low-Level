@@ -1,4 +1,4 @@
-use book_exercises::exercises;
+use testing_rust::exercises;
 
 #[test]
 fn find_first_word_test() {

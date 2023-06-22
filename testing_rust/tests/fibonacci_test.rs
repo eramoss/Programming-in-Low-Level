@@ -1,4 +1,4 @@
-use book_exercises::exercises::nth_fibonacci_num::nth_element;
+use testing_rust::exercises::nth_fibonacci_num::nth_element;
 
 #[test]
 fn nth_element_test() {
