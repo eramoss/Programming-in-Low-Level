@@ -24,3 +24,20 @@ fn same_user_different_email_test() {
     assert_eq!(user1.active, user2.active);
     assert_eq!(user1.sign_in_count, user2.sign_in_count);
 }
+use std::any::{Any, TypeId};
+trait InstanceOf
+where
+    Self: Any,
+{
+    fn instance_of<U: ?Sized + Any>(&self) -> bool {
+        TypeId::of::<Self>() == TypeId::of::<U>()
+    }
+}
+// implement this trait for every type that implements `Any` (which is most types)
+impl<T: ?Sized + Any> InstanceOf for T {}
+#[test]
+fn create_user_test() {
+    let user = build_user("eramoss", "edulramos@outlook.com");
+
+    assert!(user.instance_of::<User>());
+}
