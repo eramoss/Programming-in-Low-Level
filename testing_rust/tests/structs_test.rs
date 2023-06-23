@@ -41,3 +41,17 @@ fn create_user_test() {
 
     assert!(user.instance_of::<User>());
 }
+
+#[test]
+fn create_new_user_from_another_test() {
+    let user = build_user("eramoss", "edulramos@outlook.com");
+    let user1 = User {
+        username: user.username.clone(),
+        active: true,
+        email: user.email.clone(),
+        sign_in_count: 1,
+    };
+
+    assert_eq!(user1.email, user.email);
+    assert_ne!(user.sign_in_count, user1.sign_in_count);
+}
