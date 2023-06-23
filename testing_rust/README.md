@@ -29,6 +29,7 @@ If you're interested in learning Rust seriously and developing production-grade 
 
 - Official Rust documentation: [https://www.rust-lang.org/](https://www.rust-lang.org/)
 - Rust programming books and tutorials: [https://www.rust-lang.org/learning](https://www.rust-lang.org/learning)
+- Cargo Documentation: [https://doc.rust-lang.org/stable/cargo/](https://doc.rust-lang.org/stable/cargo/)
 
 ## Contact
 
