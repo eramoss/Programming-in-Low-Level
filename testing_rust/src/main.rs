@@ -1,3 +1,5 @@
 pub mod exercises;
-
-fn main() {}
+use restaurant::front_of_house::hosting::add_to_waitlist;
+fn main() {
+    add_to_waitlist();
+}
