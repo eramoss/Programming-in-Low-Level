@@ -9,5 +9,6 @@ fn add_n_nuns_to_vec() {
         vec.push(nth_fibonacci_num::nth_element(i));
     }
 
-    dbg!(vec);
+    dbg!(&vec);
+    assert_eq!(vec.get(9), Some(&nth_fibonacci_num::nth_element(9)));
 }
