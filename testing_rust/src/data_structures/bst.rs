@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Node {
     value: i64,
     left: Option<Box<Node>>,
@@ -130,4 +130,12 @@ fn search_node() {
 
     let node_to_search = tree.search(12);
     assert_eq!(node_to_search.unwrap().value, 12);
+}
+
+fn print_in_order(root: Option<&Node>) {
+    if root.is_some() {
+        print_in_order(root.unwrap().left.as_deref()); // stack up until root is null
+        dbg!(root.unwrap().value); // stack down
+        print_in_order(root.unwrap().right.as_deref()); // stack up until root is null
+    }
 }
