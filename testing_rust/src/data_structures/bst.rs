@@ -14,7 +14,7 @@ impl Node {
         }
     }
 }
-
+#[derive(Debug)]
 struct Tree {
     root: Option<Node>,
     amount_of_child: i64,
@@ -89,6 +89,34 @@ impl Tree {
             }
         }
     }
+
+    fn print_graph(&self) {
+        if let Some(root) = &self.root {
+            self.print_node(&root, 0, false);
+        } else {
+            println!("Empty tree");
+        }
+    }
+
+    fn print_node(&self, node: &Node, level: usize, is_right: bool) {
+        if let Some(right) = &node.right {
+            self.print_node(right, level + 1, true);
+        }
+
+        print!("{}{}", "    ".repeat(level), "  ");
+
+        if is_right {
+            print!("┌─");
+        } else {
+            print!("└─");
+        }
+
+        println!("{}", node.value);
+
+        if let Some(left) = &node.left {
+            self.print_node(left, level + 1, false);
+        }
+    }
 }
 
 #[test]
@@ -127,15 +155,6 @@ fn search_node() {
     tree.insert(17);
     tree.insert(12);
     tree.insert(13);
-
     let node_to_search = tree.search(12);
     assert_eq!(node_to_search.unwrap().value, 12);
-}
-
-fn print_in_order(root: Option<&Node>) {
-    if root.is_some() {
-        print_in_order(root.unwrap().left.as_deref()); // stack up until root is null
-        dbg!(root.unwrap().value); // stack down
-        print_in_order(root.unwrap().right.as_deref()); // stack up until root is null
-    }
 }
