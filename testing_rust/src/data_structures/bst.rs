@@ -1,3 +1,4 @@
+#[derive(Clone)]
 struct Node {
     value: i64,
     left: Option<Box<Node>>,
@@ -31,14 +32,14 @@ impl Tree {
             self.root = Some(Node::new(value));
         } else {
             let mut current = self.root.as_mut().unwrap();
-            let mut found_node_through_tree = false;
-            while found_node_through_tree == false {
+
+            loop {
                 if current.value > value {
                     if current.left.is_none() {
                         let new_node = Node::new(value);
                         current.left = Some(Box::new(new_node));
-                        found_node_through_tree = true;
                         self.amount_of_child += 1;
+                        break;
                     } else {
                         current = current.left.as_mut().unwrap();
                     }
@@ -46,14 +47,44 @@ impl Tree {
                     if current.right.is_none() {
                         let new_node = Node::new(value);
                         current.right = Some(Box::new(new_node));
-                        found_node_through_tree = true;
                         self.amount_of_child += 1;
+                        break;
                     } else {
                         current = current.right.as_mut().unwrap();
                     }
                 } else {
-                    println!("Invalid data, node cannot be inserted with same data of other nodes");
+                    eprintln!(
+                        "Invalid data, node cannot be inserted with same data of other nodes"
+                    );
                     break;
+                }
+            }
+        }
+    }
+
+    fn search(&mut self, value: i64) -> Option<Node> {
+        if self.root.is_none() {
+            eprintln!("No root node found on search");
+            return None;
+        } else {
+            let mut current = self.root.as_mut().unwrap();
+
+            loop {
+                if current.value == value {
+                    let return_node = current.clone();
+                    return Some(return_node);
+                } else if current.value > value {
+                    if current.left.is_none() {
+                        return None;
+                    }
+                    current = current.left.as_mut().unwrap();
+                } else if current.value < value {
+                    if current.right.is_none() {
+                        return None;
+                    }
+                    current = current.right.as_mut().unwrap();
+                } else {
+                    return None;
                 }
             }
         }
@@ -86,4 +117,17 @@ fn add_amount_child() {
     tree.insert(17);
 
     assert_eq!(tree.amount_of_child, 2);
+}
+
+#[test]
+fn search_node() {
+    let mut tree = Tree::new();
+    tree.insert(16);
+    tree.insert(15);
+    tree.insert(17);
+    tree.insert(12);
+    tree.insert(13);
+
+    let node_to_search = tree.search(12);
+    assert_eq!(node_to_search.unwrap().value, 12);
 }
