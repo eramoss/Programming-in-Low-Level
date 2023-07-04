@@ -25,19 +25,36 @@ impl Tree {
             amount_of_child: 0,
         }
     }
+
     fn insert(&mut self, value: i64) {
         if self.root.is_none() {
             self.root = Some(Node::new(value));
         } else {
-            let root = self.root.as_mut().expect("Root must be non-empty");
-            if value < root.value {
-                let new_node = Node::new(value);
-                root.left = Some(Box::new(new_node));
-                self.amount_of_child += 1;
-            } else {
-                let new_node = Node::new(value);
-                root.right = Some(Box::new(new_node));
-                self.amount_of_child += 1;
+            let mut current = self.root.as_mut().unwrap();
+            let mut found_node_through_tree = false;
+            while found_node_through_tree == false {
+                if current.value > value {
+                    if current.left.is_none() {
+                        let new_node = Node::new(value);
+                        current.left = Some(Box::new(new_node));
+                        found_node_through_tree = true;
+                        self.amount_of_child += 1;
+                    } else {
+                        current = current.left.as_mut().unwrap();
+                    }
+                } else if current.value < value {
+                    if current.right.is_none() {
+                        let new_node = Node::new(value);
+                        current.right = Some(Box::new(new_node));
+                        found_node_through_tree = true;
+                        self.amount_of_child += 1;
+                    } else {
+                        current = current.right.as_mut().unwrap();
+                    }
+                } else {
+                    println!("Invalid data, node cannot be inserted with same data of other nodes");
+                    break;
+                }
             }
         }
     }
